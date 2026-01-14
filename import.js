@@ -14,6 +14,7 @@
         { path: 'lib/jquery.transit.min.js',            pack: 'edit|share|m-share' },
         { path: 'lib/jquery.blob.js',                   pack: 'edit' },
         { path: 'lib/zip.js',                           pack: 'edit' },
+        { path: 'lib/jszip.min.js',                     pack: 'edit' },
         { path: 'lib/ZeroClipboard.min.js',             pack: 'edit' },
         { path: 'lib/qrcode.js',                        pack: 'edit' },
         { path: 'lib/fui/dev-lib/jhtmls.min.js',        pack: 'edit|share|m-share' },

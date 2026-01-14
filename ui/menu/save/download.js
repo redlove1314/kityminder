@@ -56,15 +56,13 @@ KityMinder.registerUI('menu/save/download', function(minder) {
 
         minder.exportData(protocol.name, options).then(function(data) {
 
-            if (protocol.name == 'freemind') return;
-
             switch (protocol.dataType) {
                 case 'text':
-                    return doDownload(buildDataUrl(mineType, data), filename, 'text');
+                    return doDownload(buildDataUrl(mineType, data), filename, 'text', mineType);
                 case 'base64':
-                    return doDownload(data, filename, 'base64');
+                    return doDownload(data, filename, 'base64', mineType);
                 case 'blob':
-                    return null;
+                    return doDownloadBlob(data, filename);
             }
 
             return null;
@@ -78,7 +76,17 @@ KityMinder.registerUI('menu/save/download', function(minder) {
             $panel.removeClass('loading');
         });
     }
-    function doDownload(url, filename, type) {
+    function doDownload(url, filename, type, mineType) {
+        if (url.startsWith('data:image/png')) {
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return Promise.resolve();
+        }
+
         var content = url.split(',')[1];
         var data;
 
@@ -88,7 +96,24 @@ KityMinder.registerUI('menu/save/download', function(minder) {
             data = decodeURIComponent(content);
         }
 
-        var blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
+        var blob = new Blob([data], { type: mineType + ';charset=utf-8' });
+        var downloadUrl = URL.createObjectURL(blob);
+
+        var link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(function() {
+            URL.revokeObjectURL(downloadUrl);
+        }, 100);
+
+        return Promise.resolve();
+    }
+
+    function doDownloadBlob(blob, filename) {
         var downloadUrl = URL.createObjectURL(blob);
 
         var link = document.createElement('a');

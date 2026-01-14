@@ -73,9 +73,55 @@ KityMinder.registerProtocol('freemind', function(minder) {
         return result;
     }
 
+    function km2xml(json) {
+        var timestamp = Date.now();
+        var id = 'ID_' + Math.random().toString(36).substr(2, 9);
+        
+        function buildNode(node, isRoot) {
+            var attrs = [];
+            attrs.push('CREATED="' + timestamp + '"');
+            attrs.push('ID="' + id + '"');
+            attrs.push('MODIFIED="' + timestamp + '"');
+            
+            if (node.data && node.data.text) {
+                attrs.push('TEXT="' + escapeXml(node.data.text) + '"');
+            }
+            
+            if (isRoot && node.data && node.data.position) {
+                attrs.push('POSITION="' + node.data.position + '"');
+            }
+            
+            var xml = '<node ' + attrs.join(' ') + '>';
+            
+            if (node.data && node.data.priority) {
+                xml += '<icon BUILTIN="full-' + node.data.priority + '"/>';
+            }
+            
+            if (node.children) {
+                node.children.forEach(function(child) {
+                    xml += buildNode(child, false);
+                });
+            }
+            
+            xml += '</node>';
+            return xml;
+        }
+        
+        return '<map version="1.0.1">\n<!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->\n' + buildNode(json, true) + '\n</map>';
+    }
+    
+    function escapeXml(str) {
+        return str.replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')
+                  .replace(/"/g, '&quot;')
+                  .replace(/'/g, '&apos;');
+    }
+
     return {
         fileDescription: 'Freemind 格式',
         fileExtension: '.mm',
+        mineType: 'application/xml',
         dataType: 'text',
 
         decode: function(local) {
@@ -89,56 +135,7 @@ KityMinder.registerProtocol('freemind', function(minder) {
         },
 
         encode: function(json, km, options) {
-            var url = 'native-support/export.php';
-            var data = JSON.stringify(json);
-
-            function fetch() {
-                return new Promise(function(resolve, reject) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', url);
-                    
-                    xhr.responseType = 'blob';
-                    xhr.onload = resolve;
-                    xhr.onerror = reject;
-
-                    var form = new FormData();
-                    form.append('type', 'freemind');
-                    form.append('data', data);
-
-                    xhr.send(form);
-                }).then(function(e) {
-                    return e.target.response;
-                });
-            }
-
-            function download() {
-                var filename = options.filename || 'freemind.mm';
-
-                var form = document.createElement('form');
-                form.setAttribute('action', url);
-                form.setAttribute('method', 'POST');
-                form.appendChild(field('filename', filename));
-                form.appendChild(field('type', 'freemind'));
-                form.appendChild(field('data', data));
-                form.appendChild(field('download', '1'));
-                document.body.appendChild(form);
-                form.submit();
-                document.body.removeChild(form);
-
-                function field(name, content) {
-                    var input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = name;
-                    input.value = content;
-                    return input;
-                }
-            }
-
-            if (options && options.download) {
-                return download();
-            } else {
-                return fetch();
-            }
+            return Promise.resolve(km2xml(json));
         }
     };
 
