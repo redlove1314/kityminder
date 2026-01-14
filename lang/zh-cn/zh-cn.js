@@ -198,7 +198,7 @@ KityMinder.LANG['zh-cn'] = {
 
         'menu': {
 
-            'mainmenutext': '百度脑图', // 主菜单按钮文本
+            'mainmenutext': '源于百度脑图', // 主菜单按钮文本
 
             'newtab': '新建',
             'opentab': '打开',
@@ -248,7 +248,7 @@ KityMinder.LANG['zh-cn'] = {
         'email_share': '邮件邀请',
         'url_share': '脑图 URL 地址：',
         'sns_share': '社交网络分享：',
-        'sns_share_text': '“{0}” - 我用百度脑图制作的思维导图，快看看吧！（地址：{1}）',
+        'sns_share_text': '“{0}” - 我用源于百度脑图制作的思维导图，快看看吧！（地址：{1}）',
         'none_share_description': '不分享当前脑图',
         'public_share_description': '创建任何人可见的分享',
         'share_button_text': '创建',
@@ -339,7 +339,7 @@ KityMinder.LANG['zh-cn'] = {
         'daysago': '{0} 天前',
         'longago': '很久之前',
 
-        'redirect': '您正在打开连接 {0}，百度脑图不能保证连接的安全性，是否要继续？',
+        'redirect': '您正在打开连接 {0}，源于百度脑图不能保证连接的安全性，是否要继续？',
         'navigator': '导航器',
 
         'unsavedcontent': '当前文件还没有保存到网盘：\n\n{0}\n\n虽然未保存的数据会缓存在草稿箱，但是清除浏览器缓存会导致草稿箱清除。',

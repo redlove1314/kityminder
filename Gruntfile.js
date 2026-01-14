@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
         ' * GitHub: <%= pkg.repository.url %> \n' +
         ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n' +
+        ' Licensed <%= pkg.licenses.map(function(l){return l.type}).join(", ") %>\n' +
         ' * ====================================================\n' +
         ' */\n\n';
 

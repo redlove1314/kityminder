@@ -123,6 +123,10 @@ Minder.Receiver = kity.createClass('Receiver', {
     updateTextOffsetData: function() {
         var me = this;
 
+        if (!this.minderNode) {
+            return this;
+        }
+
         var fontHeight = this.minderNode.getData('font-size') || this.minderNode.getStyle('font-size');
         var lineHeight = this.minderNode.getStyle('line-height') * fontHeight;
 

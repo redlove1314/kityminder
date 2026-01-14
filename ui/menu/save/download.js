@@ -79,68 +79,30 @@ KityMinder.registerUI('menu/save/download', function(minder) {
         });
     }
     function doDownload(url, filename, type) {
-        var stamp = +new Date() * 1e5 + Math.floor(Math.random() * (1e5 - 1));
-
-        stamp = stamp.toString(36);
-
-        var ret = new Promise(function(resolve, reject) {
-            var ticker = 0;
-            var MAX_TICK = 30;
-            var interval = 1000;
-
-            function check() {
-                if (document.cookie.indexOf(stamp + '=1') != -1) return resolve([stamp, ticker]);
-                if (++ticker > MAX_TICK) {
-                    resolve([stamp, ticker]);
-                }
-                setTimeout(check, interval);
-            }
-
-            setTimeout(check, interval);
-        });
-
         var content = url.split(',')[1];
+        var data;
 
-        var $form = $('<form></form>').attr({
-            'action': 'download.php',
-            'method': 'POST',
-            'accept-charset': 'utf-8'
-        });
-
-        var $content = $('<input />').attr({
-            name: 'content',
-            type: 'hidden',
-            value: decodeURIComponent(content)
-        }).appendTo($form);
-
-        var $type = $('<input />').attr({
-            name: 'type',
-            type: 'hidden',
-            value: type
-        }).appendTo($form);
-
-        var $filename = $('<input />').attr({
-            name: 'filename',
-            type: 'hidden',
-            value: filename
-        }).appendTo($form);
-
-        if (kity.Browser.ie) {
-            $('<input name="iehack" value="1" />').appendTo($form);
-        }
-        $('<input name="stamp" />').val(stamp).appendTo($form);
-
-        var netdisk = minder.getUI('menu/save/netdisk');
-        if (netdisk) {
-            netdisk.mute = true;
-            setTimeout(function() {
-                netdisk.mute = false;
-            }, 1000);
+        if (type == 'base64') {
+            data = atob(decodeURIComponent(content));
+        } else {
+            data = decodeURIComponent(content);
         }
 
-        $form.appendTo('body').submit().remove();
+        var blob = new Blob([data], { type: 'text/plain;charset=utf-8' });
+        var downloadUrl = URL.createObjectURL(blob);
 
-        return ret;
+        var link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(function() {
+            URL.revokeObjectURL(downloadUrl);
+        }, 100);
+
+        return Promise.resolve();
     }
 
     function buildDataUrl(mineType, data) {

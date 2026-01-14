@@ -20,14 +20,14 @@ KityMinder 基于 SVG 技术实现，支持绝大多数的主流浏览器，包�
 
 ## 二次开发
 
-> 不建议直接使用百度脑图仓库进行二次开发。
+> 不建议直接使用源于百度脑图仓库进行二次开发。
 >
 > 需要脑图可视化需求的，可以基于 [kityminder-core](https://github.com/fex-team/kityminder-core) 进行二次开发；
 > 需要脑图编辑需求的，可以使用 [kityminder-editor](https://github.com/fex-team/kityminder-editor) 进行二次开发。
 
 ### 依赖
 
-百度脑图依赖列表如下。
+源于百度脑图依赖列表如下。
 
 * `lib/bower/codemirror` - 备注窗口使用的代码编辑器
 * `lib/fio` - 前端 IO 操作中间件
@@ -41,7 +41,7 @@ git clone https://github.com/fex-team/kityminder.git
 
 ### 安装
 
-要在本地运行百度脑图，需要先安装一下开发工具：[git](http://git-scm.com)、[node](http://nodejs.org/)、[bower](http://bower.io/)
+要在本地运行源于百度脑图，需要先安装一下开发工具：[git](http://git-scm.com)、[node](http://nodejs.org/)、[bower](http://bower.io/)
 
 建议 `fork` 本仓库后进行二次开发。`fork` 操作完成后，会在您的 github 账户下创建一个 kityminder 的副本。接下来可以克隆到本地。
 

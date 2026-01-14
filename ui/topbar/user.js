@@ -100,11 +100,8 @@ KityMinder.registerUI('topbar/user', function(minder) {
             $loginButton.hide();
             fio.user.fire('login', user);
         } else {
-            if (window.location.href.indexOf('nocheck') == -1) {
-                return login();
-            } else {
-                $loginButton.show();
-            }
+            $loginButton.show();
+            $userButton.hide();
         }
         $tip.hide();
         currentUser = user;
